@@ -1,0 +1,1 @@
+This is the Arduino Code of a household security system that gets activated when the touch sensor is stimulated. The system has an ultrasonic sensor, a touch sensor, a temperature sensor and a servo motor as components that ensure complete security.

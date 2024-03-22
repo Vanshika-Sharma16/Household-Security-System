@@ -1,0 +1,71 @@
+#include <Servo.h>
+#define trig_pin 11
+#define echo_pin 9
+#define led_pin 3
+#define touch_pin 7
+
+long distance;
+long duration;
+bool led_status;
+int delay_var;
+int input_state;
+bool first_touch = false;
+
+Servo servo_motor;
+
+void setup() {
+  pinMode(led_pin,OUTPUT);
+  pinMode(trig_pin,OUTPUT);
+  pinMode(echo_pin,INPUT);
+  pinMode(touch_pin,INPUT);
+  servo_motor.attach(5);
+  servo_motor.write(100);
+  delay(200);
+ 
+  Serial.begin(9600);
+  digitalWrite(3,HIGH);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (first_touch == false){
+    input_state = digitalRead(7);
+    if (input_state){
+      first_touch = true;
+    }
+  }
+  if (input_state){
+    digitalWrite(trig_pin,LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig_pin,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig_pin,LOW);
+    
+    duration=pulseIn(echo_pin,HIGH);
+    
+    distance=duration*0.017;
+    Serial.print("Distance");
+    Serial.println(distance);
+    if (distance > 50){
+      led_status = false;
+    } else{
+  
+      led_status = true;
+    }
+    if (led_status){
+      if (distance < 50 && distance >= 15){
+        delay_var = 300;
+      } else if (distance < 15){
+        delay_var = 50;
+      }
+      digitalWrite(led_pin,LOW);
+      delay(delay_var);
+      digitalWrite(led_pin,HIGH);
+      delay(delay_var);
+    }
+    
+  }
+  
+  
+}
